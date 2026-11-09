@@ -1,0 +1,2951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HR Intelligence | AI Management Agent</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+--bg:#f5f7fb;
+--card:#fff;
+--text:#172033;
+--muted:#718096;
+--border:#e5e7eb;
+--primary:#4f46e5;
+--primary-dark:#3730a3;
+--success:#16a34a;
+--warning:#d97706;
+--danger:#dc2626;
+--sidebar:#111827;
+}
+
+body{
+font-family:Inter,Arial,sans-serif;
+background:var(--bg);
+color:var(--text);
+min-height:100vh
+}
+
+button,input,textarea,select{font-family:inherit}
+
+.hidden{display:none!important}
+
+button{
+cursor:pointer
+}
+
+/* LOGIN */
+
+.login-screen{
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+background:linear-gradient(135deg,#eef2ff,#f8fafc)
+}
+
+.login-card{
+width:420px;
+background:white;
+border:1px solid var(--border);
+border-radius:18px;
+padding:35px;
+box-shadow:0 20px 50px rgba(15,23,42,.08)
+}
+
+.login-logo{
+width:52px;
+height:52px;
+border-radius:14px;
+background:var(--primary);
+color:white;
+display:grid;
+place-items:center;
+font-size:25px;
+margin-bottom:18px
+}
+
+.login-card h1{
+font-size:25px
+}
+
+.login-card p{
+color:var(--muted);
+font-size:13px;
+margin-top:6px;
+margin-bottom:25px
+}
+
+.field{
+margin-bottom:15px
+}
+
+.field label{
+display:block;
+font-size:12px;
+font-weight:600;
+margin-bottom:7px
+}
+
+.field input,
+.field textarea,
+.field select{
+width:100%;
+border:1px solid var(--border);
+border-radius:9px;
+padding:11px;
+outline:none;
+font-size:13px
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus{
+border-color:var(--primary)
+}
+
+.primary-btn{
+background:var(--primary);
+color:white;
+border:none;
+border-radius:9px;
+padding:11px 17px;
+font-weight:600
+}
+
+.primary-btn:hover{
+background:var(--primary-dark)
+}
+
+.full{
+width:100%
+}
+
+.login-status{
+margin-top:12px;
+font-size:12px;
+color:var(--danger)
+}
+
+.demo-note{
+margin-top:18px;
+padding:12px;
+background:#f8fafc;
+border-radius:9px;
+font-size:11px;
+color:var(--muted);
+line-height:1.5
+}
+
+/* APP */
+
+.app{
+display:flex;
+min-height:100vh
+}
+
+.sidebar{
+width:250px;
+background:var(--sidebar);
+color:white;
+padding:24px 16px;
+position:fixed;
+top:0;
+bottom:0;
+left:0
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:12px;
+padding:0 10px 28px
+}
+
+.brand-icon{
+width:40px;
+height:40px;
+border-radius:11px;
+background:var(--primary);
+display:grid;
+place-items:center;
+font-size:20px
+}
+
+.brand h2{
+font-size:16px
+}
+
+.brand span{
+display:block;
+color:#9ca3af;
+font-size:11px;
+margin-top:3px
+}
+
+.nav-title{
+color:#6b7280;
+font-size:11px;
+text-transform:uppercase;
+letter-spacing:1px;
+padding:12px
+}
+
+.nav-item{
+display:flex;
+align-items:center;
+gap:12px;
+padding:12px;
+border-radius:9px;
+margin-bottom:4px;
+color:#cbd5e1;
+cursor:pointer;
+font-size:14px
+}
+
+.nav-item:hover,
+.nav-item.active{
+background:#1f2937;
+color:white
+}
+
+.sidebar-bottom{
+position:absolute;
+bottom:20px;
+left:16px;
+right:16px
+}
+
+.system-status{
+background:#1f2937;
+border-radius:10px;
+padding:13px;
+font-size:12px
+}
+
+.status-dot{
+display:inline-block;
+width:8px;
+height:8px;
+background:#22c55e;
+border-radius:50%;
+margin-right:7px
+}
+
+.main{
+margin-left:250px;
+width:calc(100% - 250px)
+}
+
+.topbar{
+height:72px;
+background:white;
+border-bottom:1px solid var(--border);
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 32px
+}
+
+.breadcrumb{
+color:var(--muted);
+font-size:13px
+}
+
+.top-actions{
+display:flex;
+align-items:center;
+gap:15px
+}
+
+.user{
+display:flex;
+align-items:center;
+gap:10px
+}
+
+.avatar{
+width:36px;
+height:36px;
+border-radius:50%;
+background:#e0e7ff;
+color:var(--primary);
+display:grid;
+place-items:center;
+font-weight:700;
+font-size:13px
+}
+
+.user-info strong{
+display:block;
+font-size:13px
+}
+
+.user-info span{
+color:var(--muted);
+font-size:11px
+}
+
+.logout{
+border:1px solid var(--border);
+background:white;
+border-radius:8px;
+padding:8px 12px;
+font-size:12px
+}
+
+.content{
+padding:30px;
+max-width:1500px
+}
+
+.page-heading{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:25px
+}
+
+.page-heading h1{
+font-size:25px
+}
+
+.page-heading p{
+color:var(--muted);
+margin-top:6px;
+font-size:13px
+}
+
+/* CARDS */
+
+.card{
+background:white;
+border:1px solid var(--border);
+border-radius:13px;
+padding:22px;
+margin-bottom:20px
+}
+
+.card-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:18px
+}
+
+.card-header h3{
+font-size:15px
+}
+
+.card-header span{
+color:var(--muted);
+font-size:12px
+}
+
+/* STATS */
+
+.stats{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:18px;
+margin-bottom:24px
+}
+
+.stat-card{
+background:white;
+border:1px solid var(--border);
+border-radius:13px;
+padding:20px
+}
+
+.stat-label{
+color:var(--muted);
+font-size:13px
+}
+
+.stat-value{
+font-size:27px;
+font-weight:700;
+margin-top:13px
+}
+
+.stat-change{
+color:var(--success);
+font-size:11px;
+margin-top:7px
+}
+
+/* GRID */
+
+.dashboard-grid{
+display:grid;
+grid-template-columns:1.35fr .8fr;
+gap:20px
+}
+
+/* UPLOAD */
+
+.upload-area{
+border:2px dashed #cbd5e1;
+border-radius:12px;
+padding:35px 20px;
+text-align:center;
+cursor:pointer
+}
+
+.upload-area:hover{
+border-color:var(--primary);
+background:#fafaff
+}
+
+.upload-icon{
+width:50px;
+height:50px;
+margin:auto;
+border-radius:12px;
+background:#eef2ff;
+display:grid;
+place-items:center;
+font-size:23px
+}
+
+.upload-area h3{
+margin-top:14px;
+font-size:15px
+}
+
+.upload-area p{
+color:var(--muted);
+font-size:12px;
+margin-top:6px
+}
+
+#resumeFile{
+display:none
+}
+
+.progress{
+margin-top:15px;
+height:7px;
+background:#edf0f5;
+border-radius:20px;
+overflow:hidden
+}
+
+.progress-bar{
+height:100%;
+width:0;
+background:var(--primary);
+transition:.3s
+}
+
+.progress-text{
+font-size:11px;
+color:var(--muted);
+margin-top:7px
+}
+
+/* CANDIDATE */
+
+.candidate-header{
+display:flex;
+gap:15px;
+align-items:center;
+padding-bottom:18px;
+border-bottom:1px solid var(--border)
+}
+
+.candidate-avatar{
+width:52px;
+height:52px;
+border-radius:12px;
+background:#e0e7ff;
+color:var(--primary);
+display:grid;
+place-items:center;
+font-size:18px;
+font-weight:700
+}
+
+.candidate-header h2{
+font-size:17px
+}
+
+.candidate-header p{
+color:var(--muted);
+font-size:12px;
+margin-top:4px
+}
+
+.candidate-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:12px;
+margin-top:18px
+}
+
+.info{
+background:#f8fafc;
+padding:12px;
+border-radius:9px
+}
+
+.info label{
+display:block;
+color:var(--muted);
+font-size:10px;
+margin-bottom:5px
+}
+
+.info strong{
+font-size:12px
+}
+
+/* ROLE */
+
+.role{
+margin-bottom:17px
+}
+
+.role-head{
+display:flex;
+justify-content:space-between;
+font-size:12px;
+margin-bottom:7px
+}
+
+.role-score{
+font-weight:700
+}
+
+.role-track{
+height:8px;
+background:#edf0f5;
+border-radius:20px;
+overflow:hidden
+}
+
+.role-fill{
+height:100%;
+background:var(--primary);
+border-radius:20px;
+width:0;
+transition:1s
+}
+
+/* CHAT */
+
+.chat{
+height:250px;
+overflow-y:auto;
+background:#f8fafc;
+border-radius:10px;
+padding:14px;
+margin-bottom:12px
+}
+
+.message{
+max-width:85%;
+padding:10px 12px;
+border-radius:10px;
+margin-bottom:10px;
+font-size:12px;
+line-height:1.5;
+white-space:pre-wrap
+}
+
+.message.ai{
+background:white;
+border:1px solid var(--border)
+}
+
+.message.user{
+background:var(--primary);
+color:white;
+margin-left:auto
+}
+
+.chat-input{
+display:flex;
+gap:8px
+}
+
+.chat-input input{
+flex:1;
+border:1px solid var(--border);
+border-radius:9px;
+padding:11px;
+outline:none;
+font-size:12px
+}
+
+.chat-input button{
+border:none;
+background:var(--primary);
+color:white;
+border-radius:9px;
+padding:0 17px
+}
+
+/* INTERVIEW */
+
+.round-grid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:12px
+}
+
+.round-card{
+border:1px solid var(--border);
+border-radius:11px;
+padding:16px;
+background:#fafbff
+}
+
+.round-number{
+font-size:11px;
+color:var(--primary);
+font-weight:700
+}
+
+.round-card h4{
+font-size:13px;
+margin:8px 0
+}
+
+.round-card input,
+.round-card select,
+.round-card textarea{
+width:100%;
+border:1px solid var(--border);
+border-radius:7px;
+padding:8px;
+margin-top:7px;
+font-size:11px
+}
+
+.round-card textarea{
+resize:vertical
+}
+
+.round-status{
+margin-top:9px;
+font-size:11px;
+font-weight:700
+}
+
+.save-round{
+margin-top:9px;
+width:100%;
+border:none;
+background:var(--primary);
+color:white;
+border-radius:7px;
+padding:8px;
+font-size:11px
+}
+
+.round-result{
+margin-top:15px;
+padding:12px;
+background:#f8fafc;
+border-radius:9px;
+font-size:11px;
+line-height:1.6
+}
+
+/* REPORT */
+
+.report-box{
+display:grid;
+grid-template-columns:180px 1fr;
+gap:20px
+}
+
+.report-score{
+border:1px solid var(--border);
+border-radius:12px;
+padding:20px;
+text-align:center
+}
+
+.big-score{
+font-size:38px;
+font-weight:800;
+color:var(--primary)
+}
+
+.status-badge{
+display:inline-block;
+margin-top:10px;
+padding:6px 10px;
+border-radius:20px;
+font-size:10px;
+font-weight:700
+}
+
+.qualified{
+background:#dcfce7;
+color:#15803d
+}
+
+.review{
+background:#fef3c7;
+color:#92400e
+}
+
+.not-qualified{
+background:#fee2e2;
+color:#b91c1c
+}
+
+.report-section{
+margin-bottom:15px
+}
+
+.report-section h4{
+font-size:12px;
+margin-bottom:6px
+}
+
+.report-section p{
+font-size:12px;
+color:var(--muted);
+line-height:1.6
+}
+
+/* RESULT */
+
+.result{
+margin-top:18px;
+background:#f8fafc;
+padding:16px;
+border-radius:10px;
+font-size:12px;
+line-height:1.7;
+white-space:pre-wrap;
+max-height:400px;
+overflow:auto
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1100px){
+.stats{grid-template-columns:repeat(2,1fr)}
+.dashboard-grid{grid-template-columns:1fr}
+.round-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+@media(max-width:700px){
+.sidebar{width:65px}
+.brand h2,.brand span,.nav-title,.nav-item span:last-child,.sidebar-bottom{display:none}
+.main{margin-left:65px;width:calc(100% - 65px)}
+.content{padding:18px}
+.stats{grid-template-columns:1fr}
+.candidate-grid{grid-template-columns:1fr}
+.round-grid{grid-template-columns:1fr}
+.report-box{grid-template-columns:1fr}
+.user-info{display:none}
+}
+</style>
+</head>
+
+<body>
+
+<!-- =====================================================
+LOGIN
+===================================================== -->
+
+<div id="loginScreen" class="login-screen">
+
+<div class="login-card">
+
+<div class="login-logo">🤖</div>
+
+<h1>HR Intelligence</h1>
+
+<p>AI-powered HR Management Agent</p>
+
+<div class="field">
+<label>Email</label>
+<input id="loginEmail" type="email" placeholder="Enter email">
+</div>
+
+<div class="field">
+<label>Password</label>
+<input id="loginPassword" type="password" placeholder="Enter password">
+</div>
+
+<button class="primary-btn full" onclick="login()">
+Sign In
+</button>
+
+<div id="loginStatus" class="login-status"></div>
+
+<div class="demo-note">
+<strong>Demo:</strong><br>
+Use any existing HR or Employee/Candidate account from your MySQL users table.
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+APPLICATION
+===================================================== -->
+
+<div id="application" class="app hidden">
+
+<aside class="sidebar">
+
+<div class="brand">
+
+<div class="brand-icon">🤖</div>
+
+<div>
+<h2>HR Intelligence</h2>
+<span>AI Management Agent</span>
+</div>
+
+</div>
+
+<div class="nav-title">Workspace</div>
+
+<div class="nav-item active" onclick="showSection('dashboard')">
+<span>▦</span>
+<span>Dashboard</span>
+</div>
+
+<div class="nav-item" onclick="showSection('candidate')">
+<span>👤</span>
+<span>Candidate</span>
+</div>
+
+<div class="nav-item" onclick="showSection('interview')">
+<span>🧠</span>
+<span>Interview Rounds</span>
+</div>
+
+<div class="nav-item" onclick="showSection('report')">
+<span>📊</span>
+<span>Final Report</span>
+</div>
+
+<div class="nav-item" onclick="showSection('assistant')">
+<span>💬</span>
+<span>HR AI Assistant</span>
+</div>
+
+<div class="sidebar-bottom">
+
+<div class="system-status">
+<span class="status-dot"></span>
+AI System Online
+<br>
+<span style="color:#9ca3af">
+Ollama • Qwen3 • MySQL
+</span>
+</div>
+
+</div>
+
+</aside>
+
+
+<main class="main">
+
+<header class="topbar">
+
+<div class="breadcrumb">
+Workspace / <strong id="breadcrumb">Dashboard</strong>
+</div>
+
+<div class="top-actions">
+
+<div class="user">
+
+<div class="avatar" id="topAvatar">HR</div>
+
+<div class="user-info">
+
+<strong id="topName">HR Administrator</strong>
+
+<span id="topRole">Administrator</span>
+
+</div>
+
+</div>
+
+<button class="logout" onclick="logout()">
+Logout
+</button>
+
+</div>
+
+</header>
+
+
+<section class="content">
+
+
+<!-- =====================================================
+DASHBOARD
+===================================================== -->
+
+<div id="dashboardSection">
+
+<div class="page-heading">
+
+<div>
+<h1>HR Intelligence Dashboard</h1>
+
+<p>
+AI-powered candidate screening, interviews and qualification
+</p>
+</div>
+
+<button
+class="primary-btn"
+onclick="document.getElementById('resumeFile').click()"
+>
++ Screen Resume
+</button>
+
+</div>
+
+
+<div class="stats">
+
+<div class="stat-card">
+<div class="stat-label">Current Candidate</div>
+<div class="stat-value" id="statCandidate">—</div>
+<div class="stat-change">Active profile</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-label">Role Match</div>
+<div class="stat-value" id="statRole">—</div>
+<div class="stat-change">AI evaluation</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-label">Interview Rounds</div>
+<div class="stat-value" id="statRounds">0/4</div>
+<div class="stat-change">Placement process</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-label">AI Engine</div>
+<div class="stat-value" style="font-size:20px">Qwen3</div>
+<div class="stat-change">Local Ollama</div>
+</div>
+
+</div>
+
+
+<div class="dashboard-grid">
+
+<div>
+
+<div class="card">
+
+<div class="card-header">
+<h3>Resume Screening</h3>
+<span>PDF only</span>
+</div>
+
+<div
+class="upload-area"
+onclick="document.getElementById('resumeFile').click()"
+>
+
+<div class="upload-icon">📄</div>
+
+<h3>Upload candidate resume</h3>
+
+<p>
+Extract education, skills, projects, certificates,
+experience and coding profiles.
+</p>
+
+</div>
+
+<input
+type="file"
+id="resumeFile"
+accept=".pdf"
+onchange="uploadResume()"
+>
+
+<div id="progressArea" class="hidden">
+
+<div class="progress">
+<div id="progressBar" class="progress-bar"></div>
+</div>
+
+<div id="progressText" class="progress-text">
+Preparing...
+</div>
+
+</div>
+
+<div id="screeningResult" class="result hidden"></div>
+
+</div>
+
+
+<div class="card">
+
+<div class="card-header">
+<h3>Candidate Profile</h3>
+<span id="candidateIdLabel">No candidate</span>
+</div>
+
+<div class="candidate-header">
+
+<div class="candidate-avatar" id="candidateAvatar">
+C
+</div>
+
+<div>
+<h2 id="candidateName">
+Candidate
+</h2>
+
+<p id="candidateEmail">
+Email unavailable
+</p>
+</div>
+
+</div>
+
+<div class="candidate-grid">
+
+<div class="info">
+<label>10th</label>
+<strong id="tenth">Not Available</strong>
+</div>
+
+<div class="info">
+<label>12th / Intermediate</label>
+<strong id="twelfth">Not Available</strong>
+</div>
+
+<div class="info">
+<label>B.Tech / Degree</label>
+<strong id="btech">Not Available</strong>
+</div>
+
+<div class="info">
+<label>LinkedIn</label>
+<strong id="linkedin">Not Available</strong>
+</div>
+
+<div class="info">
+<label>GitHub</label>
+<strong id="github">Not Available</strong>
+</div>
+
+<div class="info">
+<label>LeetCode</label>
+<strong id="leetcode">Not Available</strong>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div>
+
+<div class="card">
+
+<div class="card-header">
+<h3>Role Suitability</h3>
+<span>AI score</span>
+</div>
+
+<div class="role">
+<div class="role-head">
+<span>Data Science</span>
+<strong id="dsScore">0%</strong>
+</div>
+<div class="role-track">
+<div id="dsFill" class="role-fill"></div>
+</div>
+</div>
+
+<div class="role">
+<div class="role-head">
+<span>Full Stack Developer</span>
+<strong id="fsScore">0%</strong>
+</div>
+<div class="role-track">
+<div id="fsFill" class="role-fill"></div>
+</div>
+</div>
+
+<div class="role">
+<div class="role-head">
+<span>Data Analyst</span>
+<strong id="daScore">0%</strong>
+</div>
+<div class="role-track">
+<div id="daFill" class="role-fill"></div>
+</div>
+</div>
+
+<div class="role">
+<div class="role-head">
+<span>Machine Learning</span>
+<strong id="mlScore">0%</strong>
+</div>
+<div class="role-track">
+<div id="mlFill" class="role-fill"></div>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+CANDIDATE
+===================================================== -->
+
+<div id="candidateSection" class="hidden">
+
+<div class="page-heading">
+
+<div>
+<h1>Candidate Dashboard</h1>
+<p>Candidate profile and placement progress</p>
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="card-header">
+<h3>Candidate Information</h3>
+</div>
+
+<div class="candidate-grid">
+
+<div class="info">
+<label>Candidate ID</label>
+<strong id="dashCandidateId">—</strong>
+</div>
+
+<div class="info">
+<label>Name</label>
+<strong id="dashName">—</strong>
+</div>
+
+<div class="info">
+<label>Email</label>
+<strong id="dashEmail">—</strong>
+</div>
+
+<div class="info">
+<label>Interview Rounds</label>
+<strong id="dashRounds">0</strong>
+</div>
+
+<div class="info">
+<label>Overall Score</label>
+<strong id="dashOverall">—</strong>
+</div>
+
+<div class="info">
+<label>Status</label>
+<strong id="dashStatus">—</strong>
+</div>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="card-header">
+<h3>Interview Progress</h3>
+</div>
+
+<div id="candidateRounds" class="round-result">
+No interview rounds yet.
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+INTERVIEW
+===================================================== -->
+
+<div id="interviewSection" class="hidden">
+
+<div class="page-heading">
+
+<div>
+<h1>Placement Interview Rounds</h1>
+
+<p>
+Evaluate candidate through four placement stages
+</p>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<div class="card-header">
+
+<h3>Candidate</h3>
+
+<span id="interviewCandidate">
+Select/upload candidate first
+</span>
+
+</div>
+
+
+<div class="round-grid">
+
+
+<!-- ROUND 1 -->
+
+<div class="round-card">
+
+<div class="round-number">
+ROUND 01
+</div>
+
+<h4>Aptitude</h4>
+
+<input
+id="round1Score"
+type="number"
+min="0"
+max="100"
+placeholder="Score / 100"
+>
+
+<select id="round1Status">
+<option value="QUALIFIED">QUALIFIED</option>
+<option value="REVIEW">REVIEW</option>
+<option value="NOT QUALIFIED">NOT QUALIFIED</option>
+</select>
+
+<textarea
+id="round1Feedback"
+rows="3"
+placeholder="Feedback"
+></textarea>
+
+<button
+class="save-round"
+onclick="submitRound(1,'Aptitude','round1Score','round1Status','round1Feedback')"
+>
+Save Round 1
+</button>
+
+</div>
+
+
+<!-- ROUND 2 -->
+
+<div class="round-card">
+
+<div class="round-number">
+ROUND 02
+</div>
+
+<h4>Coding / Technical</h4>
+
+<input
+id="round2Score"
+type="number"
+min="0"
+max="100"
+placeholder="Score / 100"
+>
+
+<select id="round2Status">
+<option value="QUALIFIED">QUALIFIED</option>
+<option value="REVIEW">REVIEW</option>
+<option value="NOT QUALIFIED">NOT QUALIFIED</option>
+</select>
+
+<textarea
+id="round2Feedback"
+rows="3"
+placeholder="Feedback"
+></textarea>
+
+<button
+class="save-round"
+onclick="submitRound(2,'Coding / Technical','round2Score','round2Status','round2Feedback')"
+>
+Save Round 2
+</button>
+
+</div>
+
+
+<!-- ROUND 3 -->
+
+<div class="round-card">
+
+<div class="round-number">
+ROUND 03
+</div>
+
+<h4>Project / Technical</h4>
+
+<input
+id="round3Score"
+type="number"
+min="0"
+max="100"
+placeholder="Score / 100"
+>
+
+<select id="round3Status">
+<option value="QUALIFIED">QUALIFIED</option>
+<option value="REVIEW">REVIEW</option>
+<option value="NOT QUALIFIED">NOT QUALIFIED</option>
+</select>
+
+<textarea
+id="round3Feedback"
+rows="3"
+placeholder="Feedback"
+></textarea>
+
+<button
+class="save-round"
+onclick="submitRound(3,'Project / Technical','round3Score','round3Status','round3Feedback')"
+>
+Save Round 3
+</button>
+
+</div>
+
+
+<!-- ROUND 4 -->
+
+<div class="round-card">
+
+<div class="round-number">
+ROUND 04
+</div>
+
+<h4>HR Interview</h4>
+
+<input
+id="round4Score"
+type="number"
+min="0"
+max="100"
+placeholder="Score / 100"
+>
+
+<select id="round4Status">
+<option value="QUALIFIED">QUALIFIED</option>
+<option value="REVIEW">REVIEW</option>
+<option value="NOT QUALIFIED">NOT QUALIFIED</option>
+</select>
+
+<textarea
+id="round4Feedback"
+rows="3"
+placeholder="Feedback"
+></textarea>
+
+<button
+class="save-round"
+onclick="submitRound(4,'HR Interview','round4Score','round4Status','round4Feedback')"
+>
+Save Round 4
+</button>
+
+</div>
+
+</div>
+
+<div id="roundMessage" class="round-result">
+Enter scores and save each round.
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+FINAL REPORT
+===================================================== -->
+
+<div id="reportSection" class="hidden">
+
+<div class="page-heading">
+
+<div>
+<h1>Final Qualification Report</h1>
+
+<p>
+Overall candidate evaluation and hiring recommendation
+</p>
+
+</div>
+
+<button
+class="primary-btn"
+onclick="generateFinalReport()"
+>
+Generate Final Report
+</button>
+
+</div>
+
+
+<div class="card">
+
+<div class="report-box">
+
+<div class="report-score">
+
+<div class="big-score" id="finalScore">
+—
+</div>
+
+<div style="font-size:11px;color:#718096">
+Overall Score
+</div>
+
+<div
+id="finalStatus"
+class="status-badge review"
+>
+PENDING
+</div>
+
+</div>
+
+
+<div>
+
+<div class="report-section">
+<h4>Strengths</h4>
+<p id="finalStrengths">
+Complete interview rounds to generate report.
+</p>
+</div>
+
+<div class="report-section">
+<h4>Weaknesses</h4>
+<p id="finalWeaknesses">
+—
+</p>
+</div>
+
+<div class="report-section">
+<h4>Recommendation</h4>
+<p id="finalRecommendation">
+—
+</p>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+ASSISTANT
+===================================================== -->
+
+<div id="assistantSection" class="hidden">
+
+<div class="page-heading">
+
+<div>
+<h1>HR AI Assistant</h1>
+
+<p>
+Ask questions about HR policies, recruitment and employee rules
+</p>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<div
+class="chat"
+id="chat"
+>
+
+<div class="message ai">
+Hello! I am your HR AI Assistant.
+Ask me about HR policies, recruitment or candidate screening.
+</div>
+
+</div>
+
+<div class="chat-input">
+
+<input
+id="chatInput"
+placeholder="Ask HR AI..."
+onkeydown="if(event.key==='Enter') askHR()"
+>
+
+<button onclick="askHR()">
+Send
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+</section>
+
+</main>
+
+</div>
+
+
+<script>
+
+const API = "http://127.0.0.1:8001";
+
+let currentUser = null;
+let currentCandidateId = null;
+let currentCandidateName = "";
+
+
+/* =====================================================
+LOGIN
+===================================================== */
+
+async function login(){
+
+const email =
+document.getElementById("loginEmail").value.trim();
+
+const password =
+document.getElementById("loginPassword").value;
+
+const status =
+document.getElementById("loginStatus");
+
+if(!email || !password){
+
+status.textContent =
+"Please enter email and password.";
+
+return;
+}
+
+status.textContent = "Signing in...";
+
+try{
+
+const params =
+new URLSearchParams({
+email:email,
+password:password
+});
+
+const response =
+await fetch(
+`${API}/login?${params.toString()}`,
+{
+method:"POST"
+}
+);
+
+const data =
+await response.json();
+
+if(!response.ok){
+
+throw new Error(
+data.detail || "Login failed"
+);
+
+}
+
+currentUser = data;
+
+localStorage.setItem(
+"hr_user",
+JSON.stringify(data)
+);
+
+document.getElementById(
+"loginScreen"
+).classList.add("hidden");
+
+document.getElementById(
+"application"
+).classList.remove("hidden");
+
+setUserUI(data);
+
+}catch(error){
+
+console.error(error);
+
+status.textContent =
+error.message;
+
+}
+
+}
+
+
+/* =====================================================
+SET USER
+===================================================== */
+
+function setUserUI(data){
+
+const name =
+data.name ||
+data.user_name ||
+"User";
+
+const role =
+data.role ||
+"EMPLOYEE";
+
+document.getElementById(
+"topName"
+).textContent = name;
+
+document.getElementById(
+"topRole"
+).textContent = role;
+
+document.getElementById(
+"topAvatar"
+).textContent =
+name.charAt(0).toUpperCase();
+
+}
+
+
+/* =====================================================
+LOGOUT
+===================================================== */
+
+function logout(){
+
+localStorage.removeItem("hr_user");
+
+currentUser = null;
+
+currentCandidateId = null;
+
+location.reload();
+
+}
+
+
+/* =====================================================
+SECTION NAVIGATION
+===================================================== */
+
+function showSection(section){
+
+const sections = [
+"dashboard",
+"candidate",
+"interview",
+"report",
+"assistant"
+];
+
+sections.forEach(
+name => {
+
+const element =
+document.getElementById(
+name + "Section"
+);
+
+if(element){
+
+element.classList.add(
+"hidden"
+);
+
+}
+
+}
+);
+
+const selected =
+document.getElementById(
+section + "Section"
+);
+
+if(selected){
+
+selected.classList.remove(
+"hidden"
+);
+
+}
+
+const titles = {
+
+dashboard:"Dashboard",
+candidate:"Candidate Dashboard",
+interview:"Placement Rounds",
+report:"Final Report",
+assistant:"HR AI Assistant"
+
+};
+
+document.getElementById(
+"breadcrumb"
+).textContent =
+titles[section] || "Dashboard";
+
+if(section === "candidate" && currentCandidateId){
+
+loadCandidateDashboard(
+currentCandidateId
+);
+
+}
+
+if(section === "interview"){
+
+document.getElementById(
+"interviewCandidate"
+).textContent =
+currentCandidateId
+? `${currentCandidateName} (#${currentCandidateId})`
+: "Select/upload candidate first";
+
+}
+
+}
+
+
+/* =====================================================
+RESUME UPLOAD
+===================================================== */
+
+async function uploadResume(){
+
+const input =
+document.getElementById(
+"resumeFile"
+);
+
+const file =
+input.files[0];
+
+if(!file)return;
+
+if(
+!file.name.toLowerCase().endsWith(".pdf")
+){
+
+alert(
+"Please select a PDF resume."
+);
+
+return;
+
+}
+
+const formData =
+new FormData();
+
+formData.append(
+"file",
+file
+);
+
+const progressArea =
+document.getElementById(
+"progressArea"
+);
+
+const progressBar =
+document.getElementById(
+"progressBar"
+);
+
+const progressText =
+document.getElementById(
+"progressText"
+);
+
+const result =
+document.getElementById(
+"screeningResult"
+);
+
+progressArea.classList.remove(
+"hidden"
+);
+
+result.classList.add(
+"hidden"
+);
+
+progressBar.style.width =
+"15%";
+
+progressText.textContent =
+"Uploading resume...";
+
+try{
+
+const response =
+await fetch(
+`${API}/upload-resume`,
+{
+method:"POST",
+body:formData
+}
+);
+
+progressBar.style.width =
+"70%";
+
+progressText.textContent =
+"AI analyzing resume...";
+
+const data =
+await response.json();
+
+if(!response.ok){
+
+throw new Error(
+data.detail ||
+"Resume upload failed"
+);
+
+}
+
+progressBar.style.width =
+"100%";
+
+progressText.textContent =
+"Screening completed successfully.";
+
+currentCandidateId =
+data.candidate_id;
+
+currentCandidateName =
+extractValue(
+data.ai_analysis,
+"Name:"
+) || "Candidate";
+
+document.getElementById(
+"candidateIdLabel"
+).textContent =
+"Candidate #" +
+currentCandidateId;
+
+document.getElementById(
+"interviewCandidate"
+).textContent =
+`${currentCandidateName} (#${currentCandidateId})`;
+
+document.getElementById(
+"statCandidate"
+).textContent =
+currentCandidateName;
+
+updateCandidate(
+data.ai_analysis || "",
+data.profile_facts || {},
+data.candidate_id
+);
+
+updateRoles(
+data.role_scores || {}
+);
+
+result.textContent =
+data.ai_analysis ||
+"No AI analysis returned.";
+
+result.classList.remove(
+"hidden"
+);
+
+updateRoundCount();
+
+}catch(error){
+
+console.error(error);
+
+progressBar.style.width =
+"0%";
+
+progressText.textContent =
+"Screening failed.";
+
+result.textContent =
+"Error: " +
+error.message;
+
+result.classList.remove(
+"hidden"
+);
+
+}
+
+}
+
+
+/* =====================================================
+EXTRACT VALUE
+===================================================== */
+
+function extractValue(
+text,
+label
+){
+
+if(!text)return "";
+
+const lines =
+text.split("\n");
+
+for(
+const line of lines
+){
+
+if(
+line.trim()
+.toLowerCase()
+.startsWith(
+label.toLowerCase()
+)
+){
+
+return line
+.substring(
+label.length
+)
+.trim();
+
+}
+
+}
+
+return "";
+
+}
+
+
+/* =====================================================
+CANDIDATE UPDATE
+===================================================== */
+
+function updateCandidate(
+text,
+profiles,
+candidateId
+){
+
+const name =
+extractValue(
+text,
+"Name:"
+) || "Candidate";
+
+const email =
+extractValue(
+text,
+"Email:"
+) || "Email unavailable";
+
+document.getElementById(
+"candidateName"
+).textContent =
+name;
+
+document.getElementById(
+"candidateEmail"
+).textContent =
+email;
+
+document.getElementById(
+"candidateAvatar"
+).textContent =
+name.charAt(0).toUpperCase();
+
+document.getElementById(
+"candidateIdLabel"
+).textContent =
+"Candidate #" +
+candidateId;
+
+const academic =
+parseAcademic(text);
+
+document.getElementById(
+"tenth"
+).textContent =
+academic.tenth;
+
+document.getElementById(
+"twelfth"
+).textContent =
+academic.twelfth;
+
+document.getElementById(
+"btech"
+).textContent =
+academic.btech;
+
+
+/* profiles from backend */
+
+document.getElementById(
+"linkedin"
+).textContent =
+profileValue(
+profiles,
+"linkedin"
+);
+
+document.getElementById(
+"github"
+).textContent =
+profileValue(
+profiles,
+"github"
+);
+
+document.getElementById(
+"leetcode"
+).textContent =
+profileValue(
+profiles,
+"leetcode"
+);
+
+currentCandidateName =
+name;
+
+}
+
+
+/* =====================================================
+PROFILE VALUE
+===================================================== */
+
+function profileValue(
+profiles,
+key
+){
+
+if(
+!profiles ||
+!profiles[key]
+){
+
+return "Not Available";
+
+}
+
+const p =
+profiles[key];
+
+return (
+p.url ||
+p.username ||
+p.platform ||
+"Not Available"
+);
+
+}
+
+
+/* =====================================================
+ACADEMIC
+===================================================== */
+
+function parseAcademic(text){
+
+let tenth =
+"Not Available";
+
+let twelfth =
+"Not Available";
+
+let btech =
+"Not Available";
+
+const lines =
+text.split("\n");
+
+let section = "";
+
+for(
+const raw of lines
+){
+
+const line =
+raw.trim();
+
+const lower =
+line.toLowerCase();
+
+if(
+lower.startsWith("10th:")
+){
+
+section="10th";
+
+}
+
+if(
+lower.startsWith(
+"12th/intermediate:"
+)
+){
+
+section="12th";
+
+}
+
+if(
+lower.startsWith(
+"b.tech/degree:"
+)
+){
+
+section="btech";
+
+}
+
+if(
+section === "10th" &&
+(
+lower.includes("percentage:") ||
+lower.includes("cgpa:")
+)
+){
+
+tenth =
+line
+.split(":")
+.slice(1)
+.join(":")
+.trim();
+
+}
+
+if(
+section === "12th" &&
+(
+lower.includes("percentage:") ||
+lower.includes("cgpa:")
+)
+){
+
+twelfth =
+line
+.split(":")
+.slice(1)
+.join(":")
+.trim();
+
+}
+
+if(
+section === "btech" &&
+(
+lower.includes("percentage:") ||
+lower.includes("overall cgpa:")
+)
+){
+
+btech =
+line
+.split(":")
+.slice(1)
+.join(":")
+.trim();
+
+}
+
+}
+
+return {
+tenth,
+twelfth,
+btech
+};
+
+}
+
+
+/* =====================================================
+ROLE SCORES
+===================================================== */
+
+function updateRoles(
+scores
+){
+
+const roles = {
+
+"Data Science":[
+"dsScore",
+"dsFill"
+],
+
+"Full Stack Developer":[
+"fsScore",
+"fsFill"
+],
+
+"Data Analyst":[
+"daScore",
+"daFill"
+],
+
+"Machine Learning":[
+"mlScore",
+"mlFill"
+]
+
+};
+
+let bestRole = "";
+let bestScore = 0;
+
+for(
+const role in roles
+){
+
+const value =
+Number(
+scores[role] || 0
+);
+
+const score =
+Math.min(
+Math.max(value,0),
+100
+);
+
+document.getElementById(
+roles[role][0]
+).textContent =
+score + "%";
+
+document.getElementById(
+roles[role][1]
+).style.width =
+score + "%";
+
+if(score > bestScore){
+
+bestScore = score;
+bestRole = role;
+
+}
+
+}
+
+if(bestRole){
+
+document.getElementById(
+"statRole"
+).textContent =
+bestRole;
+
+}
+
+}
+
+
+/* =====================================================
+INTERVIEW ROUND
+===================================================== */
+
+async function submitRound(
+roundNumber,
+roundName,
+scoreId,
+statusId,
+feedbackId
+){
+
+if(!currentCandidateId){
+
+alert(
+"Please upload/select a candidate first."
+);
+
+return;
+
+}
+
+const score =
+Number(
+document.getElementById(
+scoreId
+).value
+);
+
+const status =
+document.getElementById(
+statusId
+).value;
+
+const feedback =
+document.getElementById(
+feedbackId
+).value.trim();
+
+if(
+isNaN(score) ||
+score < 0 ||
+score > 100
+){
+
+alert(
+"Score must be between 0 and 100."
+);
+
+return;
+
+}
+
+const params =
+new URLSearchParams({
+
+candidate_id:
+currentCandidateId,
+
+round_number:
+roundNumber,
+
+round_name:
+roundName,
+
+score:
+score,
+
+status:
+status,
+
+feedback:
+feedback
+
+});
+
+const message =
+document.getElementById(
+"roundMessage"
+);
+
+message.textContent =
+"Saving Round " +
+roundNumber +
+"...";
+
+try{
+
+const response =
+await fetch(
+`${API}/interview-round?${params.toString()}`,
+{
+method:"POST"
+}
+);
+
+const data =
+await response.json();
+
+if(!response.ok){
+
+throw new Error(
+data.detail ||
+"Could not save round"
+);
+
+}
+
+message.textContent =
+`Round ${roundNumber} saved successfully — ${score}/100 — ${status}`;
+
+updateRoundCount();
+
+}catch(error){
+
+console.error(error);
+
+message.textContent =
+"Error: " +
+error.message;
+
+}
+
+}
+
+
+/* =====================================================
+ROUND COUNT
+===================================================== */
+
+async function updateRoundCount(){
+
+if(!currentCandidateId){
+
+return;
+
+}
+
+try{
+
+const response =
+await fetch(
+`${API}/candidate/${currentCandidateId}/rounds`
+);
+
+const data =
+await response.json();
+
+const rounds =
+data.rounds || [];
+
+document.getElementById(
+"statRounds"
+).textContent =
+`${rounds.length}/4`;
+
+}catch(error){
+
+console.error(error);
+
+}
+
+}
+
+
+/* =====================================================
+CANDIDATE DASHBOARD
+===================================================== */
+
+async function loadCandidateDashboard(
+candidateId
+){
+
+try{
+
+const response =
+await fetch(
+`${API}/candidate/${candidateId}/dashboard`
+);
+
+const data =
+await response.json();
+
+if(!response.ok){
+
+throw new Error(
+data.detail ||
+"Could not load dashboard"
+);
+
+}
+
+const candidate =
+data.candidate || {};
+
+const rounds =
+data.interview_rounds || [];
+
+const report =
+data.final_report || null;
+
+document.getElementById(
+"dashCandidateId"
+).textContent =
+candidate.candidate_id || candidateId;
+
+document.getElementById(
+"dashName"
+).textContent =
+candidate.name || "—";
+
+document.getElementById(
+"dashEmail"
+).textContent =
+candidate.email || "—";
+
+document.getElementById(
+"dashRounds"
+).textContent =
+rounds.length + "/4";
+
+document.getElementById(
+"dashOverall"
+).textContent =
+report
+? report.overall_score
+: "—";
+
+document.getElementById(
+"dashStatus"
+).textContent =
+report
+? report.qualification_status
+: "Pending";
+
+if(rounds.length){
+
+document.getElementById(
+"candidateRounds"
+).innerHTML =
+rounds.map(
+r =>
+`<div style="padding:8px 0;border-bottom:1px solid #e5e7eb">
+<strong>Round ${r.round_number} — ${r.round_name}</strong>
+<br>
+Score: ${r.score ?? "—"} / 100
+&nbsp; | &nbsp;
+Status: ${r.status || "—"}
+<br>
+<span style="color:#718096">
+${r.feedback || "No feedback"}
+</span>
+</div>`
+).join("");
+
+}else{
+
+document.getElementById(
+"candidateRounds"
+).textContent =
+"No interview rounds yet.";
+
+}
+
+}catch(error){
+
+console.error(error);
+
+document.getElementById(
+"candidateRounds"
+).textContent =
+"Unable to load candidate dashboard.";
+
+}
+
+}
+
+
+/* =====================================================
+FINAL REPORT
+===================================================== */
+
+async function generateFinalReport(){
+
+if(!currentCandidateId){
+
+alert(
+"Please upload/select a candidate first."
+);
+
+return;
+
+}
+
+try{
+
+const response =
+await fetch(
+`${API}/candidate/${currentCandidateId}/rounds`
+);
+
+const data =
+await response.json();
+
+if(!response.ok){
+
+throw new Error(
+data.detail ||
+"Could not load rounds"
+);
+
+}
+
+const rounds =
+data.rounds || [];
+
+if(rounds.length < 4){
+
+alert(
+"Please complete all 4 interview rounds first."
+);
+
+return;
+
+}
+
+const scores =
+rounds.map(
+r => Number(r.score || 0)
+);
+
+const overall =
+scores.reduce(
+(a,b) => a+b,
+0
+) / scores.length;
+
+let status =
+"QUALIFIED";
+
+if(overall < 60){
+
+status =
+"NOT QUALIFIED";
+
+}else if(overall < 75){
+
+status =
+"REVIEW";
+
+}
+
+const strengths = [];
+
+const weaknesses = [];
+
+rounds.forEach(
+r => {
+
+if(
+Number(r.score) >= 75
+){
+
+strengths.push(
+`${r.round_name}: strong performance`
+);
+
+}else if(
+Number(r.score) < 60
+){
+
+weaknesses.push(
+`${r.round_name}: needs improvement`
+);
+
+}
+
+}
+);
+
+if(!strengths.length){
+
+strengths.push(
+"Candidate completed all interview rounds."
+);
+
+}
+
+if(!weaknesses.length){
+
+weaknesses.push(
+"No major weaknesses identified from round scores."
+);
+
+}
+
+const recommendation =
+status === "QUALIFIED"
+? "Recommended for the next hiring stage."
+: status === "REVIEW"
+? "Requires HR review before final decision."
+: "Not recommended based on the current interview scores.";
+
+const params =
+new URLSearchParams({
+
+candidate_id:
+currentCandidateId,
+
+overall_score:
+overall.toFixed(2),
+
+qualification_status:
+status,
+
+strengths:
+strengths.join("; "),
+
+weaknesses:
+weaknesses.join("; "),
+
+recommendation:
+recommendation
+
+});
+
+const saveResponse =
+await fetch(
+`${API}/final-report?${params.toString()}`,
+{
+method:"POST"
+}
+);
+
+const saved =
+await saveResponse.json();
+
+if(!saveResponse.ok){
+
+throw new Error(
+saved.detail ||
+"Could not save final report"
+);
+
+}
+
+document.getElementById(
+"finalScore"
+).textContent =
+overall.toFixed(1);
+
+const badge =
+document.getElementById(
+"finalStatus"
+);
+
+badge.textContent =
+status;
+
+badge.className =
+"status-badge " +
+(
+status === "QUALIFIED"
+? "qualified"
+: status === "REVIEW"
+? "review"
+: "not-qualified"
+);
+
+document.getElementById(
+"finalStrengths"
+).textContent =
+strengths.join(" • ");
+
+document.getElementById(
+"finalWeaknesses"
+).textContent =
+weaknesses.join(" • ");
+
+document.getElementById(
+"finalRecommendation"
+).textContent =
+recommendation;
+
+showSection("report");
+
+}catch(error){
+
+console.error(error);
+
+alert(
+"Final report error: " +
+error.message
+);
+
+}
+
+}
+
+
+/* =====================================================
+HR AI CHAT
+===================================================== */
+
+async function askHR(){
+
+const input =
+document.getElementById(
+"chatInput"
+);
+
+const chat =
+document.getElementById(
+"chat"
+);
+
+const question =
+input.value.trim();
+
+if(!question)return;
+
+const userMessage =
+document.createElement(
+"div"
+);
+
+userMessage.className =
+"message user";
+
+userMessage.textContent =
+question;
+
+chat.appendChild(
+userMessage
+);
+
+input.value = "";
+
+const aiMessage =
+document.createElement(
+"div"
+);
+
+aiMessage.className =
+"message ai";
+
+aiMessage.textContent =
+"Thinking...";
+
+chat.appendChild(
+aiMessage
+);
+
+chat.scrollTop =
+chat.scrollHeight;
+
+try{
+
+const response =
+await fetch(
+`${API}/hr-chat?question=${encodeURIComponent(question)}`
+);
+
+const data =
+await response.json();
+
+if(!response.ok){
+
+throw new Error(
+data.detail ||
+"AI request failed"
+);
+
+}
+
+aiMessage.textContent =
+data.answer ||
+"No response received.";
+
+}catch(error){
+
+console.error(error);
+
+aiMessage.textContent =
+"Unable to connect to HR AI.";
+
+}
+
+chat.scrollTop =
+chat.scrollHeight;
+
+}
+
+
+/* =====================================================
+AUTO LOGIN
+===================================================== */
+
+window.addEventListener(
+"load",
+() => {
+
+const saved =
+localStorage.getItem(
+"hr_user"
+);
+
+if(saved){
+
+try{
+
+currentUser =
+JSON.parse(saved);
+
+document.getElementById(
+"loginScreen"
+).classList.add(
+"hidden"
+);
+
+document.getElementById(
+"application"
+).classList.remove(
+"hidden"
+);
+
+setUserUI(
+currentUser
+);
+
+}catch(error){
+
+localStorage.removeItem(
+"hr_user"
+);
+
+}
+
+}
+
+}
+);
+
+</script>
+
+</body>
+</html>

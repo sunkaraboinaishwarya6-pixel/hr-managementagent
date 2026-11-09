@@ -1,0 +1,1986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>HR Intelligence | AI Management Agent</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #f6f7fb;
+            --card: #ffffff;
+            --text: #172033;
+            --muted: #718096;
+            --border: #e7eaf0;
+            --primary: #4f46e5;
+            --primary-dark: #3730a3;
+            --success: #16a34a;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --sidebar: #111827;
+        }
+
+        body {
+            font-family: Inter, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        button,
+        input {
+            font-family: inherit;
+        }
+
+        .app {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            width: 250px;
+            background: var(--sidebar);
+            color: white;
+            padding: 24px 16px;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 10px 28px;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 11px;
+            background: var(--primary);
+            display: grid;
+            place-items: center;
+            font-size: 20px;
+        }
+
+        .brand h2 {
+            font-size: 16px;
+        }
+
+        .brand span {
+            display: block;
+            color: #9ca3af;
+            font-size: 11px;
+            margin-top: 3px;
+        }
+
+        .nav-title {
+            color: #6b7280;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 12px 12px 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 9px;
+            margin-bottom: 4px;
+            color: #cbd5e1;
+            cursor: pointer;
+            font-size: 14px;
+            transition: .2s;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background: #1f2937;
+            color: white;
+        }
+
+        .sidebar-bottom {
+            position: absolute;
+            bottom: 20px;
+            left: 16px;
+            right: 16px;
+        }
+
+        .system-status {
+            background: #1f2937;
+            border-radius: 10px;
+            padding: 13px;
+            font-size: 12px;
+        }
+
+        .status-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            margin-right: 7px;
+        }
+
+        /* MAIN */
+
+        .main {
+            margin-left: 250px;
+            width: calc(100% - 250px);
+        }
+
+        .topbar {
+            height: 72px;
+            background: white;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+        }
+
+        .breadcrumb {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .breadcrumb strong {
+            color: var(--text);
+        }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .notification {
+            width: 36px;
+            height: 36px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            display: grid;
+            place-items: center;
+        }
+
+        .user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #e0e7ff;
+            color: var(--primary);
+            display: grid;
+            place-items: center;
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .user-info strong {
+            display: block;
+            font-size: 13px;
+        }
+
+        .user-info span {
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .content {
+            padding: 30px;
+            max-width: 1500px;
+        }
+
+        .page-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 26px;
+        }
+
+        .page-heading h1 {
+            font-size: 25px;
+        }
+
+        .page-heading p {
+            color: var(--muted);
+            margin-top: 6px;
+            font-size: 13px;
+        }
+
+        .primary-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 9px;
+            padding: 11px 17px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .primary-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        /* STATS */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            padding: 20px;
+        }
+
+        .stat-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .stat-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 9px;
+            display: grid;
+            place-items: center;
+            background: #eef2ff;
+        }
+
+        .stat-value {
+            font-size: 27px;
+            font-weight: 700;
+            margin-top: 13px;
+        }
+
+        .stat-change {
+            color: var(--success);
+            font-size: 11px;
+            margin-top: 7px;
+        }
+
+        /* GRID */
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1.4fr .8fr;
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            padding: 22px;
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .card-header h3 {
+            font-size: 15px;
+        }
+
+        .card-header span {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        /* UPLOAD */
+
+        .upload-area {
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            padding: 35px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary);
+            background: #fafaff;
+        }
+
+        .upload-icon {
+            width: 50px;
+            height: 50px;
+            margin: auto;
+            border-radius: 12px;
+            background: #eef2ff;
+            display: grid;
+            place-items: center;
+            font-size: 23px;
+        }
+
+        .upload-area h3 {
+            margin-top: 14px;
+            font-size: 15px;
+        }
+
+        .upload-area p {
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 6px;
+        }
+
+        #resumeFile {
+            display: none;
+        }
+
+        .upload-button {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 9px 16px;
+            background: #eef2ff;
+            color: var(--primary);
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* PROGRESS */
+
+        .progress-box {
+            display: none;
+            margin-top: 18px;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            margin-bottom: 7px;
+        }
+
+        .progress-track {
+            height: 7px;
+            background: #edf0f5;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0;
+            background: var(--primary);
+            transition: width .4s;
+        }
+
+        /* ROLE */
+
+        .role {
+            margin-bottom: 17px;
+        }
+
+        .role-head {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            margin-bottom: 7px;
+        }
+
+        .role-score {
+            font-weight: 700;
+        }
+
+        .role-track {
+            height: 8px;
+            background: #edf0f5;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .role-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 20px;
+            width: 0;
+            transition: width 1s;
+        }
+
+        /* CANDIDATE */
+
+        .candidate {
+            display: none;
+        }
+
+        .candidate-header {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            padding-bottom: 18px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .candidate-avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            background: #e0e7ff;
+            color: var(--primary);
+            display: grid;
+            place-items: center;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .candidate-header h2 {
+            font-size: 17px;
+        }
+
+        .candidate-header p {
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .candidate-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .info {
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 9px;
+        }
+
+        .info label {
+            display: block;
+            color: var(--muted);
+            font-size: 10px;
+            margin-bottom: 5px;
+        }
+
+        .info strong {
+            font-size: 12px;
+        }
+
+        /* CHAT */
+
+        .chat {
+            height: 250px;
+            overflow-y: auto;
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+
+        .message {
+            max-width: 85%;
+            padding: 10px 12px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            font-size: 12px;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+
+        .message.ai {
+            background: white;
+            border: 1px solid var(--border);
+        }
+
+        .message.user {
+            background: var(--primary);
+            color: white;
+            margin-left: auto;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 8px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            padding: 11px;
+            outline: none;
+            font-size: 12px;
+        }
+
+        .chat-input button {
+            border: none;
+            background: var(--primary);
+            color: white;
+            border-radius: 9px;
+            padding: 0 17px;
+            cursor: pointer;
+        }
+
+        /* RESULT */
+
+        .result-box {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .result-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .result-content {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 16px;
+            max-height: 500px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 1100px) {
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .sidebar {
+                width: 65px;
+                padding: 15px 8px;
+            }
+
+            .brand h2,
+            .brand span,
+            .nav-title,
+            .nav-item span:not(:first-child),
+            .sidebar-bottom {
+                display: none;
+            }
+
+            .brand {
+                justify-content: center;
+            }
+
+            .nav-item {
+                justify-content: center;
+            }
+
+            .main {
+                margin-left: 65px;
+                width: calc(100% - 65px);
+            }
+
+            .content {
+                padding: 18px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .candidate-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .user-info {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">🤖</div>
+
+            <div>
+                <h2>HR Intelligence</h2>
+                <span>AI Management Agent</span>
+            </div>
+        </div>
+
+        <div class="nav-title">Workspace</div>
+
+        <div class="nav-item active">
+            <span>▦</span>
+            <span>Dashboard</span>
+        </div>
+
+        <div class="nav-item">
+            <span>👤</span>
+            <span>Candidates</span>
+        </div>
+
+        <div class="nav-item">
+            <span>📄</span>
+            <span>Resume Screening</span>
+        </div>
+
+        <div class="nav-item">
+            <span>🎯</span>
+            <span>Role Matching</span>
+        </div>
+
+        <div class="nav-item">
+            <span>🧠</span>
+            <span>Placement Rounds</span>
+        </div>
+
+        <div class="nav-item">
+            <span>📊</span>
+            <span>Reports</span>
+        </div>
+
+        <div class="nav-item">
+            <span>📚</span>
+            <span>Knowledge Base</span>
+        </div>
+
+        <div class="sidebar-bottom">
+
+            <div class="system-status">
+                <span class="status-dot"></span>
+                AI System Online
+                <br>
+                <span style="color:#9ca3af;">
+                    Ollama • Qwen3
+                </span>
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <div class="breadcrumb">
+                Workspace / <strong>HR Dashboard</strong>
+            </div>
+
+            <div class="top-actions">
+
+                <div class="notification">
+                    🔔
+                </div>
+
+                <div class="user">
+
+                    <div class="avatar">
+                        HR
+                    </div>
+
+                    <div class="user-info">
+                        <strong>HR Administrator</strong>
+                        <span>Administrator</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- CONTENT -->
+
+        <section class="content">
+
+            <div class="page-heading">
+
+                <div>
+                    <h1>HR Intelligence Dashboard</h1>
+
+                    <p>
+                        AI-powered resume screening and candidate evaluation
+                    </p>
+                </div>
+
+                <button
+                    class="primary-btn"
+                    onclick="document.getElementById('resumeFile').click()"
+                >
+                    + Screen Resume
+                </button>
+
+            </div>
+
+
+            <!-- STATS -->
+
+            <div class="stats">
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+                        <span class="stat-label">
+                            Candidates
+                        </span>
+
+                        <div class="stat-icon">
+                            👤
+                        </div>
+                    </div>
+
+                    <div
+                        class="stat-value"
+                        id="candidateCount"
+                    >
+                        0
+                    </div>
+
+                    <div class="stat-change">
+                        Screening database
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+                        <span class="stat-label">
+                            Resumes Screened
+                        </span>
+
+                        <div class="stat-icon">
+                            📄
+                        </div>
+                    </div>
+
+                    <div
+                        class="stat-value"
+                        id="resumeCount"
+                    >
+                        0
+                    </div>
+
+                    <div class="stat-change">
+                        AI analyzed
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+                        <span class="stat-label">
+                            AI Engine
+                        </span>
+
+                        <div class="stat-icon">
+                            🤖
+                        </div>
+                    </div>
+
+                    <div
+                        class="stat-value"
+                        style="font-size:20px;"
+                    >
+                        Qwen3
+                    </div>
+
+                    <div class="stat-change">
+                        Local Ollama model
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+                        <span class="stat-label">
+                            Database
+                        </span>
+
+                        <div class="stat-icon">
+                            🗄️
+                        </div>
+                    </div>
+
+                    <div
+                        class="stat-value"
+                        style="font-size:20px;"
+                    >
+                        MySQL
+                    </div>
+
+                    <div class="stat-change">
+                        Connected
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- DASHBOARD -->
+
+            <div class="dashboard-grid">
+
+                <div>
+
+                    <!-- UPLOAD -->
+
+                    <div class="card">
+
+                        <div class="card-header">
+
+                            <h3>
+                                Resume Screening
+                            </h3>
+
+                            <span>
+                                PDF only
+                            </span>
+
+                        </div>
+
+
+                        <div
+                            class="upload-area"
+                            onclick="document.getElementById('resumeFile').click()"
+                        >
+
+                            <div class="upload-icon">
+                                📄
+                            </div>
+
+                            <h3>
+                                Upload candidate resume
+                            </h3>
+
+                            <p>
+                                AI will extract education, skills,
+                                projects, certificates and experience.
+                            </p>
+
+                            <span class="upload-button">
+                                Choose PDF Resume
+                            </span>
+
+                        </div>
+
+                        <input
+                            type="file"
+                            id="resumeFile"
+                            accept=".pdf"
+                            onchange="uploadResume()"
+                        >
+
+
+                        <!-- PROGRESS -->
+
+                        <div
+                            class="progress-box"
+                            id="progressBox"
+                        >
+
+                            <div class="progress-label">
+
+                                <span id="progressText">
+                                    Preparing...
+                                </span>
+
+                                <span id="progressPercent">
+                                    0%
+                                </span>
+
+                            </div>
+
+                            <div class="progress-track">
+
+                                <div
+                                    class="progress-bar"
+                                    id="progressBar"
+                                ></div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- RESULT -->
+
+                        <div
+                            class="result-box"
+                            id="resultBox"
+                        >
+
+                            <div class="result-title">
+                                AI Screening Result
+                            </div>
+
+                            <div
+                                class="result-content"
+                                id="resultContent"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- CANDIDATE -->
+
+                    <div
+                        class="card candidate"
+                        id="candidateCard"
+                    >
+
+                        <div class="candidate-header">
+
+                            <div
+                                class="candidate-avatar"
+                                id="candidateAvatar"
+                            >
+                                C
+                            </div>
+
+                            <div>
+
+                                <h2 id="candidateName">
+                                    Candidate
+                                </h2>
+
+                                <p id="candidateEmail">
+                                    Email unavailable
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="candidate-grid">
+
+                            <div class="info">
+
+                                <label>
+                                    B.Tech CGPA
+                                </label>
+
+                                <strong id="btechCgpa">
+                                    Not Available
+                                </strong>
+
+                            </div>
+
+
+                            <div class="info">
+
+                                <label>
+                                    12th / Intermediate
+                                </label>
+
+                                <strong id="intermediate">
+                                    Not Available
+                                </strong>
+
+                            </div>
+
+
+                            <div class="info">
+
+                                <label>
+                                    10th CGPA
+                                </label>
+
+                                <strong id="tenthCgpa">
+                                    Not Available
+                                </strong>
+
+                            </div>
+
+
+                            <div class="info">
+
+                                <label>
+                                    LinkedIn
+                                </label>
+
+                                <strong id="linkedin">
+                                    Not Available
+                                </strong>
+
+                            </div>
+
+
+                            <div class="info">
+
+                                <label>
+                                    GitHub
+                                </label>
+
+                                <strong id="github">
+                                    Not Available
+                                </strong>
+
+                            </div>
+
+
+                            <div class="info">
+
+                                <label>
+                                    LeetCode
+                                </label>
+
+                                <strong id="leetcode">
+                                    Not Available
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- RIGHT COLUMN -->
+
+                <div>
+
+                    <!-- ROLE MATCHING -->
+
+                    <div class="card">
+
+                        <div class="card-header">
+
+                            <h3>
+                                Role Suitability
+                            </h3>
+
+                            <span>
+                                AI score
+                            </span>
+
+                        </div>
+
+
+                        <div class="role">
+
+                            <div class="role-head">
+
+                                <span>
+                                    Data Science
+                                </span>
+
+                                <span
+                                    class="role-score"
+                                    id="dataScienceScore"
+                                >
+                                    0%
+                                </span>
+
+                            </div>
+
+                            <div class="role-track">
+
+                                <div
+                                    class="role-fill"
+                                    id="dataScienceFill"
+                                ></div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="role">
+
+                            <div class="role-head">
+
+                                <span>
+                                    Full Stack Developer
+                                </span>
+
+                                <span
+                                    class="role-score"
+                                    id="fullStackScore"
+                                >
+                                    0%
+                                </span>
+
+                            </div>
+
+                            <div class="role-track">
+
+                                <div
+                                    class="role-fill"
+                                    id="fullStackFill"
+                                ></div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="role">
+
+                            <div class="role-head">
+
+                                <span>
+                                    Data Analyst
+                                </span>
+
+                                <span
+                                    class="role-score"
+                                    id="dataAnalystScore"
+                                >
+                                    0%
+                                </span>
+
+                            </div>
+
+                            <div class="role-track">
+
+                                <div
+                                    class="role-fill"
+                                    id="dataAnalystFill"
+                                ></div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="role">
+
+                            <div class="role-head">
+
+                                <span>
+                                    Machine Learning
+                                </span>
+
+                                <span
+                                    class="role-score"
+                                    id="mlScore"
+                                >
+                                    0%
+                                </span>
+
+                            </div>
+
+                            <div class="role-track">
+
+                                <div
+                                    class="role-fill"
+                                    id="mlFill"
+                                ></div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- HR AI ASSISTANT -->
+
+                    <div class="card">
+
+                        <div class="card-header">
+
+                            <h3>
+                                HR AI Assistant
+                            </h3>
+
+                            <span>
+                                Local AI
+                            </span>
+
+                        </div>
+
+
+                        <div
+                            class="chat"
+                            id="chat"
+                        >
+
+                            <div class="message ai">
+                                Hello! I am your HR AI Assistant.
+                                Ask me about HR policies,
+                                recruitment or candidate screening.
+                            </div>
+
+                        </div>
+
+
+                        <div class="chat-input">
+
+                            <input
+                                type="text"
+                                id="chatInput"
+                                placeholder="Ask HR AI..."
+                                onkeydown="handleChatKey(event)"
+                            >
+
+                            <button onclick="askHR()">
+                                Send
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- JAVASCRIPT -->
+
+<script>
+
+const API = "http://127.0.0.1:8001";
+
+
+/* =========================
+   RESUME UPLOAD
+========================= */
+
+async function uploadResume() {
+    console.log("UPLOAD FUNCTION TRIGGERED");
+    console.log("API URL:", API);
+
+    const fileInput = document.getElementById("resumeFile");
+    const file = fileInput.files[0];
+
+    if (!file) return;
+
+    if (!file.name.toLowerCase().endsWith(".pdf")) {
+        alert("Please select a PDF resume.");
+        fileInput.value = "";
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const progressBox = document.getElementById("progressBox");
+    const progressText = document.getElementById("progressText");
+    const progressPercent = document.getElementById("progressPercent");
+    const progressBar = document.getElementById("progressBar");
+    const resultBox = document.getElementById("resultBox");
+    const resultContent = document.getElementById("resultContent");
+
+    progressBox.style.display = "block";
+    resultBox.style.display = "none";
+
+    setProgress("Uploading resume...", 10);
+
+    try {
+        console.log("ABOUT TO CALL BACKEND");
+console.log("FETCH STARTED");
+
+const response = await fetch(
+    `${API}/upload-resume`,
+    {
+        method: "POST",
+        body: formData
+    }
+);
+
+console.log("FETCH FINISHED");
+console.log("Backend response status:", response.status);
+
+        console.log("Backend response status:", response.status);
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(
+                `Backend error ${response.status}: ${errorText}`
+            );
+        }
+
+        setProgress("AI analysis completed...", 75);
+
+        const data = await response.json();
+
+console.log("BACKEND JSON RECEIVED:", data);
+
+        setProgress("Preparing screening report...", 90);
+
+        resultContent.textContent =
+            data.ai_analysis || "No AI analysis returned.";
+
+        resultBox.style.display = "block";
+
+        updateCandidate(data.ai_analysis || "");
+
+        updateRoleScores(data.role_scores || {});
+
+        setProgress("Resume screening completed", 100);
+
+        const candidateCount =
+            document.getElementById("candidateCount");
+
+        const resumeCount =
+            document.getElementById("resumeCount");
+
+        candidateCount.textContent =
+            Number(candidateCount.textContent || 0) + 1;
+
+        resumeCount.textContent =
+            Number(resumeCount.textContent || 0) + 1;
+
+        console.log("FINAL SCREENING RESULT:", data);
+
+    } catch (error) {
+
+        console.error("Resume upload error:", error);
+
+        progressBox.style.display = "block";
+        resultBox.style.display = "block";
+
+        progressText.textContent =
+            "Resume screening failed";
+
+        progressPercent.textContent =
+            "Error";
+
+        progressBar.style.width = "0%";
+
+        resultContent.textContent =
+            "Resume screening failed.\n\n" +
+            error.message;
+
+    }
+}
+
+
+/* =========================
+   PROGRESS
+========================= */
+
+function setProgress(text, percent) {
+
+    const progressText =
+        document.getElementById(
+            "progressText"
+        );
+
+    const progressPercent =
+        document.getElementById(
+            "progressPercent"
+        );
+
+    const progressBar =
+        document.getElementById(
+            "progressBar"
+        );
+
+
+    progressText.textContent =
+        text;
+
+    progressPercent.textContent =
+        percent + "%";
+
+    progressBar.style.width =
+        percent + "%";
+}
+
+
+/* =========================
+   CANDIDATE PARSER
+========================= */
+
+function updateCandidate(aiText) {
+
+    const candidateCard =
+        document.getElementById(
+            "candidateCard"
+        );
+
+    if (!candidateCard) {
+        return;
+    }
+
+
+    candidateCard.style.display =
+        "block";
+
+
+    const lines =
+        aiText.split("\n");
+
+
+    let name =
+        "Candidate";
+
+    let email =
+        "Email unavailable";
+
+    let btech =
+        "Not Available";
+
+    let intermediate =
+        "Not Available";
+
+    let tenth =
+        "Not Available";
+
+    let linkedin =
+        "Not Available";
+
+    let github =
+        "Not Available";
+
+    let leetcode =
+        "Not Available";
+
+
+    let currentSection =
+        "";
+
+
+    for (
+        let i = 0;
+        i < lines.length;
+        i++
+    ) {
+
+        const line =
+            lines[i].trim();
+
+
+        /*
+         * Name
+         */
+
+        if (
+            line.startsWith("Name:")
+        ) {
+
+            const value =
+                line
+                    .replace("Name:", "")
+                    .trim();
+
+            if (value) {
+                name = value;
+            }
+        }
+
+
+        /*
+         * Email
+         */
+
+        if (
+            line.startsWith("Email:")
+        ) {
+
+            const value =
+                line
+                    .replace("Email:", "")
+                    .trim();
+
+            if (value) {
+                email = value;
+            }
+        }
+
+
+        /*
+         * Detect sections
+         */
+
+        if (
+            line
+                .toLowerCase()
+                .startsWith("10th:")
+        ) {
+
+            currentSection =
+                "10th";
+        }
+
+
+        if (
+            line
+                .toLowerCase()
+                .startsWith("12th/intermediate:")
+        ) {
+
+            currentSection =
+                "12th";
+        }
+
+
+        if (
+            line
+                .toLowerCase()
+                .startsWith("b.tech/degree:")
+        ) {
+
+            currentSection =
+                "btech";
+        }
+
+
+        /*
+         * Academic values
+         */
+
+        if (
+            currentSection === "10th" &&
+            line
+                .toLowerCase()
+                .includes("cgpa:")
+        ) {
+
+            tenth =
+                line
+                    .split(":")
+                    .slice(1)
+                    .join(":")
+                    .trim();
+        }
+
+
+        if (
+            currentSection === "12th" &&
+            line
+                .toLowerCase()
+                .includes("percentage:")
+        ) {
+
+            intermediate =
+                line
+                    .split(":")
+                    .slice(1)
+                    .join(":")
+                    .trim();
+        }
+
+
+        if (
+            currentSection === "btech" &&
+            line
+                .toLowerCase()
+                .includes("overall cgpa:")
+        ) {
+
+            btech =
+                line
+                    .split(":")
+                    .slice(1)
+                    .join(":")
+                    .trim();
+        }
+
+
+        /*
+         * Social / coding profiles
+         */
+
+        if (
+            line.startsWith("LinkedIn:")
+        ) {
+
+            linkedin =
+                line
+                    .replace("LinkedIn:", "")
+                    .trim();
+        }
+
+
+        if (
+            line.startsWith("GitHub:")
+        ) {
+
+            github =
+                line
+                    .replace("GitHub:", "")
+                    .trim();
+        }
+
+
+        if (
+            line.startsWith("LeetCode:")
+        ) {
+
+            leetcode =
+                line
+                    .replace("LeetCode:", "")
+                    .trim();
+        }
+
+    }
+
+
+    /*
+     * Update UI
+     */
+
+    document.getElementById(
+        "candidateName"
+    ).textContent = name;
+
+
+    document.getElementById(
+        "candidateEmail"
+    ).textContent = email;
+
+
+    document.getElementById(
+        "btechCgpa"
+    ).textContent = btech;
+
+
+    document.getElementById(
+        "intermediate"
+    ).textContent = intermediate;
+
+
+    document.getElementById(
+        "tenthCgpa"
+    ).textContent = tenth;
+
+
+    document.getElementById(
+        "linkedin"
+    ).textContent = linkedin;
+
+
+    document.getElementById(
+        "github"
+    ).textContent = github;
+
+
+    document.getElementById(
+        "leetcode"
+    ).textContent = leetcode;
+
+
+    /*
+     * Candidate avatar
+     */
+
+    const avatar =
+        document.getElementById(
+            "candidateAvatar"
+        );
+
+
+    if (
+        avatar &&
+        name &&
+        name !== "Candidate"
+    ) {
+
+        avatar.textContent =
+            name
+                .charAt(0)
+                .toUpperCase();
+    }
+
+}
+
+
+/* =========================
+   ROLE SCORES
+========================= */
+
+function updateRoleScores(scores) {
+
+    const roleMap = {
+
+        "Data Science":
+            [
+                "dataScienceScore",
+                "dataScienceFill"
+            ],
+
+        "Full Stack Developer":
+            [
+                "fullStackScore",
+                "fullStackFill"
+            ],
+
+        "Data Analyst":
+            [
+                "dataAnalystScore",
+                "dataAnalystFill"
+            ],
+
+        "Machine Learning":
+            [
+                "mlScore",
+                "mlFill"
+            ]
+
+    };
+
+
+    for (
+        const role in roleMap
+    ) {
+
+        const score =
+            Number(
+                scores[role] || 0
+            );
+
+
+        const scoreElement =
+            document.getElementById(
+                roleMap[role][0]
+            );
+
+
+        const fillElement =
+            document.getElementById(
+                roleMap[role][1]
+            );
+
+
+        if (scoreElement) {
+
+            scoreElement.textContent =
+                score + "%";
+        }
+
+
+        if (fillElement) {
+
+            /*
+             * Current backend produces
+             * raw weighted scores.
+             *
+             * We cap visual display at 100.
+             */
+
+            const visualScore =
+                Math.min(
+                    Math.max(score, 0),
+                    100
+                );
+
+
+            fillElement.style.width =
+                visualScore + "%";
+        }
+
+    }
+
+}
+
+
+/* =========================
+   HR AI ASSISTANT
+========================= */
+
+async function askHR() {
+
+    const input =
+        document.getElementById(
+            "chatInput"
+        );
+
+    const chat =
+        document.getElementById(
+            "chat"
+        );
+
+
+    if (
+        !input ||
+        !chat
+    ) {
+
+        return;
+    }
+
+
+    const question =
+        input.value.trim();
+
+
+    if (!question) {
+        return;
+    }
+
+
+    /*
+     * User message
+     */
+
+    const userMessage =
+        document.createElement(
+            "div"
+        );
+
+
+    userMessage.className =
+        "message user";
+
+
+    userMessage.textContent =
+        question;
+
+
+    chat.appendChild(
+        userMessage
+    );
+
+
+    input.value = "";
+
+
+    /*
+     * AI message
+     */
+
+    const aiMessage =
+        document.createElement(
+            "div"
+        );
+
+
+    aiMessage.className =
+        "message ai";
+
+
+    aiMessage.textContent =
+        "Thinking...";
+
+
+    chat.appendChild(
+        aiMessage
+    );
+
+
+    chat.scrollTop =
+        chat.scrollHeight;
+
+
+    try {
+
+    const response = await fetch(
+        `${API}/hr-chat?question=${encodeURIComponent(question)}`
+    );
+
+    if (!response.ok) {
+
+        throw new Error(
+            `Backend error ${response.status}`
+        );
+
+    }
+
+    const data = await response.json();
+
+    aiMessage.textContent =
+        data.answer ||
+        "No response received.";
+
+}
+catch (error) {
+
+    console.error(
+        "AI Assistant error:",
+        error
+    );
+
+    aiMessage.textContent =
+        "Unable to connect to the HR AI backend.";
+
+}
+
+
+    chat.scrollTop =
+        chat.scrollHeight;
+
+}
+
+
+/* =========================
+   ENTER KEY
+========================= */
+
+function handleChatKey(event) {
+
+    if (
+        event.key === "Enter"
+    ) {
+
+        event.preventDefault();
+
+        askHR();
+    }
+
+}
+
+console.log("HR APP JAVASCRIPT LOADED");
+
+</script>
+
+</body>
+</html>
